@@ -1,12 +1,12 @@
-# Database code for the DB Forum, full solution!
+#!/usr/bin/env python3
 
 import psycopg2, bleach
 
 DBNAME = "news"
 
 def question_1():
-  print("Question 1: ")
-  """Return all posts from the 'database', most recent first."""
+  print("Question 1: What are the most popular three articles of all time?")
+  print(" ")
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
   c.execute("select title, count(*) as view_count "+
@@ -15,11 +15,14 @@ def question_1():
     "group by title order by view_count desc limit 3;")
   posts = c.fetchall()
   db.close()
-  print(posts)
+  print("\t{:35s}{:<20s}".format("Title", "View Count"))
+  for (title, view_count) in posts:
+    print("\t{:<35s}{:<20s}".format(title, str(view_count)))
+  print("-------------------------------------------------------")
 
 def question_2():
-  print("Question 2: ")
-  """Return all posts from the 'database', most recent first."""
+  print("Question 2: Who are the most popular article authors of all time?")
+  print(" ")
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
   c.execute("select authors.name, count(*) as view_count "+
@@ -29,11 +32,14 @@ def question_2():
     "order by view_count desc;")
   posts = c.fetchall()
   db.close()
-  print(posts)
+  print("\t{:25s}{:<20s}".format("Name", "View Count"))
+  for (name, view_count) in posts:
+    print("\t{:<25s}{:<20s}".format(name, str(view_count)))
+  print("-------------------------------------------------------")
 
 def question_3():
-  print("Question 3: ")
-  """Return all posts from the 'database', most recent first."""
+  print("Question 3: On which days did more than 1% of requests lead to errors?")
+  print(" ")
   db = psycopg2.connect(database=DBNAME)
   c = db.cursor()
   c.execute("select * from"+
@@ -52,7 +58,10 @@ def question_3():
     "where percentage>1;")
   posts = c.fetchall()
   db.close()
-  print(posts)
+  print("\t{:15s}{:<20s}".format("Date", "Percentage"))
+  for (total_date, percentage) in posts:
+    print("\t{:<15s}{:<20s}".format(str(total_date), str(percentage)))
+  print("-------------------------------------------------------")
 
 def main():
   question_1()
